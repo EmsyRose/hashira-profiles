@@ -1,0 +1,48 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #111;
+    color: white;
+}
+header {
+    text-align: center;
+    padding: 2rem;
+    background-color: #222;
+}
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 2rem;
+}
+.card {
+    background-color: #222;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: scale(1.05);
+}
+.card .banner {
+    height: 150px;
+    background: var(--banner);
+}
+main {
+    padding: 2rem;
+}
+main h2 {
+    color: var(--color);
+}
+.back-link {
+    margin-top: 2rem;
+}
