@@ -1,62 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hashira Profiles</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鬼滅の刃 - Hashira Profiles</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to bottom, #0d0d0d, #1a1a1a);
+      color: #f5f5f5;
+    }
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-bottom: 3px solid #b91c1c;
+    }
+    header h1 {
+      font-size: 3rem;
+      margin: 0;
+      color: #f87171;
+    }
+    header h2 {
+      font-size: 1.5rem;
+      margin: 0.5rem 0 0;
+      color: #fbbf24;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+    .card {
+      background: #111;
+      border: 2px solid #333;
+      border-radius: 1rem;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    }
+    .card img {
+      width: 100%;
+      border-radius: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .card h3 {
+      margin: 0.5rem 0 0;
+      font-size: 1.2rem;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px var(--card-color);
+      border-color: var(--card-color);
+    }
+    .profile {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      overflow-y: auto;
+      padding: 2rem;
+    }
+    .profile.active {
+      display: block;
+    }
+    .profile-header {
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+      background: rgba(255,255,255,0.05);
+    }
+    .profile h2 {
+      margin: 0 0 0.5rem;
+    }
+    .close-btn {
+      float: right;
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
+    .gallery {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    .gallery img, .gallery video {
+      width: 100%;
+      border-radius: 0.5rem;
+    }
+    .fanart-credit {
+      font-size: 0.8rem;
+      color: #bbb;
+      margin-top: 0.2rem;
+    }
+  </style>
 </head>
 <body>
-<header>
-    <h1>Hashira Profiles</h1>
-</header>
-<div class="grid">
+  <header>
+    <h1>鬼滅の刃</h1>
+    <h2>柱 - Hashira Profiles</h2>
+  </header>
 
-    <a href="pages/giyu.html" class="card" style="--banner: linear-gradient(135deg, #0ab4ff 50%, #c0392b 50%);">
-        <div class="banner"></div>
-        <h2>Giyu Tomioka</h2>
-    </a>
+  <main class="grid" id="hashiraGrid"></main>
 
-    <a href="pages/rengoku.html" class="card" style="--banner: linear-gradient(135deg, #ff9800 50%, #ff0000 50%);">
-        <div class="banner"></div>
-        <h2>Kyojuro Rengoku</h2>
-    </a>
+  <section class="profile" id="profileView">
+    <span class="close-btn" onclick="closeProfile()">&times;</span>
+    <div class="profile-header" id="profileHeader">
+      <h2 id="profileName"></h2>
+      <p id="profileBio"></p>
+    </div>
+    <h3>Official Arts</h3>
+    <div class="gallery" id="profileOfficial"></div>
+    <h3>Fanarts</h3>
+    <div class="gallery" id="profileFanart"></div>
+    <h3>Videos / Animatics</h3>
+    <div class="gallery" id="profileVideos"></div>
+  </section>
 
-    <a href="pages/shinobu.html" class="card" style="--banner: linear-gradient(135deg, #9c27b0 50%, #4caf50 50%);">
-        <div class="banner"></div>
-        <h2>Shinobu Kocho</h2>
-    </a>
+  <script>
+    const hashira = [
+      {
+        name: "Giyu Tomioka",
+        portrait: "https://via.placeholder.com/300x400?text=Giyu",
+        color: "#3b82f6",
+        bio: "The Water Hashira, calm and stoic.",
+        official: [],
+        fanart: [],
+        videos: []
+      },
+      {
+        name: "Kyojuro Rengoku",
+        portrait: "https://via.placeholder.com/300x400?text=Rengoku",
+        color: "#f97316",
+        bio: "The Flame Hashira, passionate and noble.",
+        official: [],
+        fanart: [],
+        videos: []
+      },
+      {
+        name: "Shinobu Kocho",
+        portrait: "https://via.placeholder.com/300x400?text=Shinobu",
+        color: "#a855f7",
+        bio: "The Insect Hashira, graceful and deadly.",
+        official: [],
+        fanart: [],
+        videos: []
+      },
+      {
+        name: "Tengen Uzui",
+        portrait: "https://via.placeholder.com/300x400?text=Tengen",
+        color: "#14b8a6",
+        bio: "The Sound Hashira, flamboyant and strong.",
+        official: [],
+        fanart: [],
+        videos: []
+      },
+      {
+        name: "Mitsuri Kanroji",
+        portrait: "https://via.placeholder.com/300x400?text=Mitsuri",
+        color: "#ec4899",
+        bio: "The Love Hashira, cheerful and powerful.",
+        official: [],
+        fanart: [],
+        videos: []
+      },
+      {
+        name: "Muichiro Tokito",
+        portrait: "https://via.placeholder.com/300x400?text=Muichiro",
+        color: "#38bdf8",
+        bio: "The Mist Hashira, young and prodigious.",
+        official: [],
+        fanart: [],
+        videos: []
+      },
+      {
+        name: "Gyomei Himejima",
+        portrait: "https://via.placeholder.com/300x400?text=Gyomei",
+        color: "#9ca3af",
+        bio: "The Stone Hashira, gentle giant.",
+        official: [],
+        fanart: [],
+        videos: []
+      },
+      {
+        name: "Obanai Iguro",
+        portrait: "https://via.placeholder.com/300x400?text=Obanai",
+        color: "#22c55e",
+        bio: "The Serpent Hashira, strict and loyal.",
+        official: [],
+        fanart: [],
+        videos: []
+      },
+      {
+        name: "Sanemi Shinazugawa",
+        portrait: "https://via.placeholder.com/300x400?text=Sanemi",
+        color: "#86efac",
+        bio: "The Wind Hashira, brash but caring.",
+        official: [],
+        fanart: [],
+        videos: []
+      }
+    ];
 
-    <a href="pages/tengen.html" class="card" style="--banner: linear-gradient(135deg, #c0c0c0 50%, #000000 50%);">
-        <div class="banner"></div>
-        <h2>Tengen Uzui</h2>
-    </a>
+    const grid = document.getElementById("hashiraGrid");
+    const profile = document.getElementById("profileView");
+    const profileHeader = document.getElementById("profileHeader");
+    const profileName = document.getElementById("profileName");
+    const profileBio = document.getElementById("profileBio");
+    const profileOfficial = document.getElementById("profileOfficial");
+    const profileFanart = document.getElementById("profileFanart");
+    const profileVideos = document.getElementById("profileVideos");
 
-    <a href="pages/mitsuri.html" class="card" style="--banner: linear-gradient(135deg, #ffb6c1 50%, #ff69b4 50%);">
-        <div class="banner"></div>
-        <h2>Mitsuri Kanroji</h2>
-    </a>
+    hashira.forEach((h, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.setProperty("--card-color", h.color);
+      card.innerHTML = `
+        <img src="${h.portrait}" alt="${h.name}">
+        <h3>${h.name}</h3>
+      `;
+      card.onclick = () => openProfile(index);
+      grid.appendChild(card);
+    });
 
-    <a href="pages/muichiro.html" class="card" style="--banner: linear-gradient(135deg, #00ced1 50%, #2f4f4f 50%);">
-        <div class="banner"></div>
-        <h2>Muichiro Tokito</h2>
-    </a>
+    function openProfile(index) {
+      const h = hashira[index];
+      profileName.textContent = h.name;
+      profileBio.textContent = h.bio;
+      profileOfficial.innerHTML = h.official.map(src => `<img src="${src}" alt="Official art">`).join("");
+      profileFanart.innerHTML = h.fanart.map(f => `<div><img src="${f.src}" alt="Fanart"><div class="fanart-credit">Credit: ${f.credit}</div></div>`).join("");
+      profileVideos.innerHTML = h.videos.map(v => `<video controls src="${v}"></video>`).join("");
+      profileHeader.style.background = hexToRgba(h.color, 0.15);
+      profile.classList.add("active");
+    }
 
-    <a href="pages/obanai.html" class="card" style="--banner: linear-gradient(135deg, #000000 50%, #ffffff 50%);">
-        <div class="banner"></div>
-        <h2>Obanai Iguro</h2>
-    </a>
+    function closeProfile() {
+      profile.classList.remove("active");
+    }
 
-    <a href="pages/sanemi.html" class="card" style="--banner: linear-gradient(135deg, #8bc34a 50%, #ffffff 50%);">
-        <div class="banner"></div>
-        <h2>Sanemi Shinazugawa</h2>
-    </a>
-
-    <a href="pages/gyomei.html" class="card" style="--banner: linear-gradient(135deg, #a0522d 50%, #d2b48c 50%);">
-        <div class="banner"></div>
-        <h2>Gyomei Himejima</h2>
-    </a>
-
-</div>
+    function hexToRgba(hex, alpha) {
+      const bigint = parseInt(hex.slice(1), 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+  </script>
 </body>
 </html>
